@@ -1,5 +1,4 @@
 const express = require("express");
-const author = require("../models/author");
 const router = express.Router();
 const Author = require("../models/author");
 
@@ -10,6 +9,7 @@ router.get("/", async (req, res) => {
   if (req.query.name != null && req.query.name != "") {
     searchOptions.name = new RegExp(req.query.name, "i");
   }
+  console.log(searchOptions.name, searchOptions);
 
   try {
     const authors = await Author.find(searchOptions);
@@ -36,7 +36,8 @@ router.post("/", async (req, res) => {
   try {
     const newAuthor = await author.save();
     res.redirect("authors");
-  } catch {
+  } catch (error) {
+    console.log(error);
     let locals = { errorMessage: "Error Creating Author" };
     res.render("authors/new", {
       author: author,
